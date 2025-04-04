@@ -1,0 +1,67 @@
+For MP-SPDZ installation, please follow the instructions on the github page: https://github.com/data61/MP-SPDZ
+
+After the installation, you can build your protocol (VM). For replicated secret sharing with semi-honest security run:
+make -j4 replicated-ring-party.x
+
+If you prefer to try other protocols, refer to the official readme.
+
+Before compiling your python code and running your program, you must establish TLS certificates between your parties. For this run:
+Scripts/setup-ssl.sh 3
+This sets TLS certificates between 3 parties locally.
+
+Now you are ready to compile your program. The program should be saved with a .mpc and saved in the folder Programs/Source/
+
+To compile the tutorials run:
+./compile.py -R64 mozaik_tutorial 
+
+or
+
+./compile.py -R64 mozaik_tutorial2
+
+The parameter -R 64 says the program should be compiled for arithmetic circuit over 64-bit rings. Alternatively you can opt for compilation for field with -F option or boolean circuits with -B option followed by the bit size.
+
+You can run the compiled bytecode in your replicated secret sharing-based protocol by running:
+Scripts/ring.sh -v mozaik_tutorial
+
+This will run your program locally. The -v option specifies the output should provide detailed information about the cost of the program.
+
+--------------------------
+
+For Yao's garbled circuits you first need to compile the VM:
+make -j4 yao
+
+Then you can compile the millionaires example:
+./compile.py -G -B64 mozaik_millionaires
+
+Here, the -G option specifies the program should be compiled specifically for garbled circuits
+
+You can then run the billionaires example in yao's GCs by running the garbler in one terminal:
+./yao-party.x -I -p 0 mozaik_billionaires
+
+and the evaluator in another terminal window:
+
+./yao-party.x -I -p 1 -h localhost mozaik_billionaires
+
+The -I option says that the program will ask for input in the terminal (if the input from parties is not provided from their files. To be more concrete, parties can load a private input from a corresponding file Player-Data/Input-P<playerno>-0). The -p option specifies the player number and -h localhost says the protocol is run locally on your machine. 
+
+--------------------------
+
+Similarly, to run the ripple carry adder example, suited for boolean circuits, you might want to run it in a protocol suited for binary domain. For this we picked replicated binary SS:
+make -j4 replicated-bin-party.x
+
+Then compile the mpc script:
+./compile.py -B 64 mozaik_rca
+
+And run with:
+Scripts/replicated.sh -v mozaik_rca
+
+-------------------------
+To run the ML training example run:
+./compile.py -R64 mozaik_keras_mniost_dense
+
+and then
+
+Scripts/ring.sh -v mozaik_keras_mnist_dense
+
+-------------------------
+We also provide the example for ML inference (mozaik_MITBIH_inference.mpc), however, this example requires large files containing the samples and the model. Hence this file is simply for your reference.
