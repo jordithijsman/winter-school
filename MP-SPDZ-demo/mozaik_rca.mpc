@@ -1,0 +1,24 @@
+from Compiler.GC.types import sbitvec, sbits
+
+conversions = 1000000  #1 mil
+simd = 1000
+n_threads = 4
+ring_size = 64
+
+sb = sbits.get_type(simd)
+
+n_loops = conversions//simd
+
+
+@for_range_multithread(n_threads, 1, n_loops)
+def _(k):
+    #print_ln('Start bucket %s', k)
+    a = [sb(2**simd-1 if ((15 >> i & 0x1) > 0) else 0 ) for i in range(ring_size)]
+    b = [sb(2**simd-1 if ((10 >> i & 0x1) > 0) else 0 ) for i in range(ring_size)]
+
+    out = sbits.ripple_carry_adder(a, b)
+
+
+
+
+

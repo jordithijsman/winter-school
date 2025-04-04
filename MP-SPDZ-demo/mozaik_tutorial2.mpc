@@ -1,0 +1,41 @@
+def test(actual, expected):
+
+    # you can reveal a number in order to print it
+
+    actual = actual.reveal()
+    print_ln('expected %s, got %s', expected, actual)
+
+# now let's do a computation with private inputs
+
+data = Matrix(3, 2, sfix)
+
+@for_range_opt(3)
+def _(i):
+    for j in range(2):
+        data[i][j] = i + j
+
+# permutation matrix
+
+M = Matrix(2, 2, sfix)
+M[0][0] = 0
+M[1][0] = 1
+M[0][1] = 1
+M[1][1] = 0
+
+"""
+Original data:
+[ [0, 1],
+  [1, 2],
+  [2, 3] ]
+
+After multiplying by permutation matrix:
+[ [1, 0],
+  [2, 1],
+  [3, 2] ]
+"""
+
+# matrix multiplication
+
+M = data * M
+test(M[0][0], 1)
+test(M[2][1], 2)

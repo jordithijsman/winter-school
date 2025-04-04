@@ -1,0 +1,20 @@
+def millionnaires():
+	""" Secure comparison, receiving input from each party via stdin """
+	print_ln("Waiting for Alice's input")
+	alice = sint.get_input_from(0)
+	print_ln("Waiting for Bob's input")
+	bob = sint.get_input_from(1)
+
+	b = alice < bob
+	print_ln('The richest is: %s', b.reveal())
+	
+def millionnaires_input_from_file():
+	""" Secure comparison, receiving input from each party via stdin """
+	alice = sint.get_input_from(0)
+	bob = sint.get_input_from(1)
+
+	b = alice < bob
+	print_ln('The richest is: %s', b.reveal())
+	
+millionnaires()
+# millionnaires_input_from_file()
