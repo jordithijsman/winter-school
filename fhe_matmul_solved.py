@@ -477,9 +477,7 @@ def Check(method: AXPYMethod, n_rows:int, n_cols:int, target_err = 1e-8, slow_ro
     with open("times.txt", "w") as f:
         for i in range(100):
             meth_str = Meth2Str(method)
-
-            vec_pt = Vec2Plaintext(context, vec)
-            ct = context.Encrypt(keys.publicKey, vec_pt)
+            
             # Set up matrix
             element_range = (0, 16)
             matrix = np.random.randint(*element_range, size=(n_rows, n_cols)).astype(np.float64)
@@ -497,6 +495,8 @@ def Check(method: AXPYMethod, n_rows:int, n_cols:int, target_err = 1e-8, slow_ro
         
             context, keys = SetupContextForAXPY(method, (n_rows, n_cols), max_vec_size, slow_rotation=slow_rotation)
 
+            vec_pt = Vec2Plaintext(context, vec)
+            ct = context.Encrypt(keys.publicKey, vec_pt)
     
             tic = time()
     
