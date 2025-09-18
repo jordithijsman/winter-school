@@ -474,13 +474,12 @@ def SetupContextForAXPY(method:AXPYMethod, mat_dim,  max_vec_size:int, slow_rota
 
 
 def Check(method: AXPYMethod, n_rows:int, n_cols:int, target_err = 1e-8, slow_rotation: bool = True):
-    
-    meth_str = Meth2Str(method)
-
-    vec_pt = Vec2Plaintext(context, vec)
-    ct = context.Encrypt(keys.publicKey, vec_pt)
     with open("times.txt", "w") as f:
         for i in range(100):
+            meth_str = Meth2Str(method)
+
+            vec_pt = Vec2Plaintext(context, vec)
+            ct = context.Encrypt(keys.publicKey, vec_pt)
             # Set up matrix
             element_range = (0, 16)
             matrix = np.random.randint(*element_range, size=(n_rows, n_cols)).astype(np.float64)
