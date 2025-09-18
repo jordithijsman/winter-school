@@ -483,7 +483,7 @@ def Check(method: AXPYMethod, n_rows:int, n_cols:int, target_err = 1e-8, slow_ro
     vec = np.random.randint(*element_range, size=n_cols).astype(np.float64)
 
     # maximum vector size
-    max_vec_size = 2**13
+    max_vec_size = 2**14
     assert max_vec_size >= n_rows * n_cols
 
     print("[!!!] FHE Based Matrix Vector Multiplication")
@@ -496,13 +496,19 @@ def Check(method: AXPYMethod, n_rows:int, n_cols:int, target_err = 1e-8, slow_ro
 
     vec_pt = Vec2Plaintext(context, vec)
     ct = context.Encrypt(keys.publicKey, vec_pt)
-    
-    tic = time()
 
-    ct_res = AXPY(context, matrix, ct, method, slow_rotation=slow_rotation)
+    times = []
+    for i in range(100):
+        tic = time()
 
-    toc = time()
+        ct_res = AXPY(context, matrix, ct, method, slow_rotation=slow_rotation)
 
+        toc = time()
+
+        times.append(toc-tic)
+        print(toc-tic)
+
+    print(times)
     # Check output
     res_pt = context.Decrypt(ct_res, keys.secretKey)
     
